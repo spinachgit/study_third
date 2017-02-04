@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mysql.dao.SystemFileMapper">
+  <resultMap id="BaseResultMap" type="com.test.mysql.model.SystemFile">
+    <id column="contract_step_id" jdbcType="INTEGER" property="contractStepId" />
+    <result column="admin_user_id" jdbcType="INTEGER" property="adminUserId" />
+    <result column="step1_confirm" jdbcType="BIT" property="step1Confirm" />
+    <result column="step2_confirm" jdbcType="BIT" property="step2Confirm" />
+    <result column="step3_confirm" jdbcType="BIT" property="step3Confirm" />
+    <result column="step4_confirm" jdbcType="BIT" property="step4Confirm" />
+    <result column="step5_confirm" jdbcType="BIT" property="step5Confirm" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    contract_step_id, admin_user_id, step1_confirm, step2_confirm, step3_confirm, step4_confirm, 
+    step5_confirm, ctime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from business_contract_step
+    where contract_step_id = #{contractStepId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from business_contract_step
+    where contract_step_id = #{contractStepId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.mysql.model.SystemFile">
+    insert into business_contract_step (contract_step_id, admin_user_id, step1_confirm, 
+      step2_confirm, step3_confirm, step4_confirm, 
+      step5_confirm, ctime)
+    values (#{contractStepId,jdbcType=INTEGER}, #{adminUserId,jdbcType=INTEGER}, #{step1Confirm,jdbcType=BIT}, 
+      #{step2Confirm,jdbcType=BIT}, #{step3Confirm,jdbcType=BIT}, #{step4Confirm,jdbcType=BIT}, 
+      #{step5Confirm,jdbcType=BIT}, #{ctime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mysql.model.SystemFile">
+    insert into business_contract_step
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contractStepId != null">
+        contract_step_id,
+      </if>
+      <if test="adminUserId != null">
+        admin_user_id,
+      </if>
+      <if test="step1Confirm != null">
+        step1_confirm,
+      </if>
+      <if test="step2Confirm != null">
+        step2_confirm,
+      </if>
+      <if test="step3Confirm != null">
+        step3_confirm,
+      </if>
+      <if test="step4Confirm != null">
+        step4_confirm,
+      </if>
+      <if test="step5Confirm != null">
+        step5_confirm,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contractStepId != null">
+        #{contractStepId,jdbcType=INTEGER},
+      </if>
+      <if test="adminUserId != null">
+        #{adminUserId,jdbcType=INTEGER},
+      </if>
+      <if test="step1Confirm != null">
+        #{step1Confirm,jdbcType=BIT},
+      </if>
+      <if test="step2Confirm != null">
+        #{step2Confirm,jdbcType=BIT},
+      </if>
+      <if test="step3Confirm != null">
+        #{step3Confirm,jdbcType=BIT},
+      </if>
+      <if test="step4Confirm != null">
+        #{step4Confirm,jdbcType=BIT},
+      </if>
+      <if test="step5Confirm != null">
+        #{step5Confirm,jdbcType=BIT},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mysql.model.SystemFile">
+    update business_contract_step
+    <set>
+      <if test="adminUserId != null">
+        admin_user_id = #{adminUserId,jdbcType=INTEGER},
+      </if>
+      <if test="step1Confirm != null">
+        step1_confirm = #{step1Confirm,jdbcType=BIT},
+      </if>
+      <if test="step2Confirm != null">
+        step2_confirm = #{step2Confirm,jdbcType=BIT},
+      </if>
+      <if test="step3Confirm != null">
+        step3_confirm = #{step3Confirm,jdbcType=BIT},
+      </if>
+      <if test="step4Confirm != null">
+        step4_confirm = #{step4Confirm,jdbcType=BIT},
+      </if>
+      <if test="step5Confirm != null">
+        step5_confirm = #{step5Confirm,jdbcType=BIT},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where contract_step_id = #{contractStepId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mysql.model.SystemFile">
+    update business_contract_step
+    set admin_user_id = #{adminUserId,jdbcType=INTEGER},
+      step1_confirm = #{step1Confirm,jdbcType=BIT},
+      step2_confirm = #{step2Confirm,jdbcType=BIT},
+      step3_confirm = #{step3Confirm,jdbcType=BIT},
+      step4_confirm = #{step4Confirm,jdbcType=BIT},
+      step5_confirm = #{step5Confirm,jdbcType=BIT},
+      ctime = #{ctime,jdbcType=TIMESTAMP}
+    where contract_step_id = #{contractStepId,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.test.mysql.model.SystemFile">
+    <id column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    file_id, file_name, url, project_name, size, ctime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from system_file
+    where file_id = #{fileId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from system_file
+    where file_id = #{fileId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.test.mysql.model.SystemFile">
+    insert into system_file (file_id, file_name, url, 
+      project_name, size, ctime
+      )
+    values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mysql.model.SystemFile">
+    insert into system_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="projectName != null">
+        project_name,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=INTEGER},6	
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mysql.model.SystemFile">
+    update system_file
+    <set>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        size = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where file_id = #{fileId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mysql.model.SystemFile">
+    update system_file
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      ctime = #{ctime,jdbcType=TIMESTAMP}
+    where file_id = #{fileId,jdbcType=VARCHAR}
+  </update>
+</mapper>

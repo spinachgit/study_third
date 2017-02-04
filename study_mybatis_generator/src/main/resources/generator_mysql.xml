@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE generatorConfiguration  
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"  
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">  
+  
+<generatorConfiguration>
+  <!-- 因为是在项目中运行，classPathEntry可以不要，但是在CMD中运行，是需要的 -->
+  <!-- <classPathEntry location="D:\develop\repository\mysql\mysql-connector-java\5.1.36\mysql-connector-java-5.1.36.jar" /> -->  
+  
+  <context id="Mysql2Tables" targetRuntime="MyBatis3">
+  	<!-- (property*,plugin*,commentGenerator?,jdbcConnection,javaTypeResolver?,javaModelGenerator,sqlMapGenerator?,javaClientGenerator?,table+)"。 -->
+  	<!-- 控制注释 -->
+    <commentGenerator>
+      <!-- 是否去除所有自动生成的注释文件 -->
+      <property name="suppressAllComments" value="true" />
+      <!-- 是否去除所有自动生成的文件的时间戳，默认为false -->
+      <property name="suppressDate" value="true" />
+    </commentGenerator>	
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.20.78:3306/fxg"  
+        userId="root"   password="tag123">  
+    </jdbcConnection>  
+  	
+    <javaTypeResolver >  
+      <property name="forceBigDecimals" value="false" />  
+    </javaTypeResolver>  
+  	
+  	<!-- model -->
+    <javaModelGenerator targetPackage="com.test.mysql.model" targetProject="src/main/java">  
+      <property name="enableSubPackages" value="true" />  
+      <property name="trimStrings" value="true" />  
+    </javaModelGenerator>  
+  
+  	<!-- mapper -->
+    <sqlMapGenerator targetPackage="com.test.mysql.mapper"  targetProject="src/main/java">  
+      <property name="enableSubPackages" value="true" />
+      <property name="methodNameCalculator" value="extended" />
+    </sqlMapGenerator>  
+
+
+  	<!-- dao -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.test.mysql.dao"  targetProject="src/main/java">  
+      <property name="enableSubPackages" value="true" />  
+    </javaClientGenerator>
+  	
+  	<!-- schema你的数据库，tableName表明，domainObjectName对应你的javabean类名  要生成的table，可以有多个table  -->
+    <table schema="fxg" tableName="business_bank" domainObjectName="BusinessBank" enableCountByExample="false" enableUpdateByExample="false"  
+           enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"
+           >  
+    </table>  
+  
+  </context>  
+</generatorConfiguration> 
