@@ -1,0 +1,3 @@
+clean package
+dependency:copy-dependencies -DoutputDirectory=lib
+clean install
