@@ -1,4 +1,4 @@
-package com.spinach.push.jpush;
+package com.spinach.serve.jpush;
 
 import java.util.Collection;
 import java.util.HashMap;

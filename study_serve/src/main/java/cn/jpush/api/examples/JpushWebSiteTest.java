@@ -18,7 +18,8 @@ import cn.jpush.api.push.model.audience.AudienceTarget;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
 import cn.jpush.api.report.ReceivedsResult;
-import com.spinach.push.jpush.JpushConfig;
+
+import com.spinach.serve.jpush.JpushConfig;
 
 /**
  *  这是 JPush REST API 的 Java 版本封装开发包，是由极光推送官方提供的，一般支持最新的 API 功能。

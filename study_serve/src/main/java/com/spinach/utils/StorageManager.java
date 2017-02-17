@@ -1,4 +1,4 @@
-package com.zhangwei.common;
+package com.spinach.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mysql.dao.GoodsInfoMapper">
+  <resultMap id="BaseResultMap" type="com.test.mysql.model.GoodsInfo">
+    <id column="goodsid" jdbcType="INTEGER" property="goodsid" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+    <result column="goodsname" jdbcType="VARCHAR" property="goodsname" />
+    <result column="goodsnick" jdbcType="VARCHAR" property="goodsnick" />
+    <result column="platformgoodsid" jdbcType="INTEGER" property="platformgoodsid" />
+    <result column="businessid" jdbcType="INTEGER" property="businessid" />
+    <result column="categoryid" jdbcType="INTEGER" property="categoryid" />
+    <result column="costprice" jdbcType="DECIMAL" property="costprice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="onprice" jdbcType="DECIMAL" property="onprice" />
+    <result column="offprice" jdbcType="DECIMAL" property="offprice" />
+    <result column="cash" jdbcType="DECIMAL" property="cash" />
+    <result column="stand" jdbcType="VARCHAR" property="stand" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="store" jdbcType="INTEGER" property="store" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="isapp" jdbcType="TINYINT" property="isapp" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="moods" jdbcType="INTEGER" property="moods" />
+    <result column="businessgoodsauditid" jdbcType="INTEGER" property="businessgoodsauditid" />
+    <result column="statistics" jdbcType="TINYINT" property="statistics" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="safe_store" jdbcType="INTEGER" property="safeStore" />
+    <result column="is_auto_order" jdbcType="BIT" property="isAutoOrder" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.test.mysql.model.GoodsInfo">
+    <result column="describes" jdbcType="LONGVARCHAR" property="describes" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    goodsid, barcode, goodsname, goodsnick, platformgoodsid, businessid, categoryid, 
+    costprice, price, onprice, offprice, cash, stand, unit, store, weight, isapp, imgurl, 
+    sales, moods, businessgoodsauditid, statistics, ctime, safe_store, is_auto_order
+  </sql>
+  <sql id="Blob_Column_List">
+    describes
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.test.mysql.model.GoodsInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.test.mysql.model.GoodsInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from goods_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods_info
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goods_info
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.mysql.model.GoodsInfo">
+    insert into goods_info (goodsid, barcode, goodsname, 
+      goodsnick, platformgoodsid, businessid, 
+      categoryid, costprice, price, 
+      onprice, offprice, cash, 
+      stand, unit, store, 
+      weight, isapp, imgurl, 
+      sales, moods, businessgoodsauditid, 
+      statistics, ctime, safe_store, 
+      is_auto_order, describes)
+    values (#{goodsid,jdbcType=INTEGER}, #{barcode,jdbcType=VARCHAR}, #{goodsname,jdbcType=VARCHAR}, 
+      #{goodsnick,jdbcType=VARCHAR}, #{platformgoodsid,jdbcType=INTEGER}, #{businessid,jdbcType=INTEGER}, 
+      #{categoryid,jdbcType=INTEGER}, #{costprice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, 
+      #{onprice,jdbcType=DECIMAL}, #{offprice,jdbcType=DECIMAL}, #{cash,jdbcType=DECIMAL}, 
+      #{stand,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{store,jdbcType=INTEGER}, 
+      #{weight,jdbcType=INTEGER}, #{isapp,jdbcType=TINYINT}, #{imgurl,jdbcType=VARCHAR}, 
+      #{sales,jdbcType=INTEGER}, #{moods,jdbcType=INTEGER}, #{businessgoodsauditid,jdbcType=INTEGER}, 
+      #{statistics,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{safeStore,jdbcType=INTEGER}, 
+      #{isAutoOrder,jdbcType=BIT}, #{describes,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mysql.model.GoodsInfo">
+    insert into goods_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        goodsid,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+      <if test="goodsname != null">
+        goodsname,
+      </if>
+      <if test="goodsnick != null">
+        goodsnick,
+      </if>
+      <if test="platformgoodsid != null">
+        platformgoodsid,
+      </if>
+      <if test="businessid != null">
+        businessid,
+      </if>
+      <if test="categoryid != null">
+        categoryid,
+      </if>
+      <if test="costprice != null">
+        costprice,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="onprice != null">
+        onprice,
+      </if>
+      <if test="offprice != null">
+        offprice,
+      </if>
+      <if test="cash != null">
+        cash,
+      </if>
+      <if test="stand != null">
+        stand,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="store != null">
+        store,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="isapp != null">
+        isapp,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="sales != null">
+        sales,
+      </if>
+      <if test="moods != null">
+        moods,
+      </if>
+      <if test="businessgoodsauditid != null">
+        businessgoodsauditid,
+      </if>
+      <if test="statistics != null">
+        statistics,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+      <if test="safeStore != null">
+        safe_store,
+      </if>
+      <if test="isAutoOrder != null">
+        is_auto_order,
+      </if>
+      <if test="describes != null">
+        describes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsname != null">
+        #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsnick != null">
+        #{goodsnick,jdbcType=VARCHAR},
+      </if>
+      <if test="platformgoodsid != null">
+        #{platformgoodsid,jdbcType=INTEGER},
+      </if>
+      <if test="businessid != null">
+        #{businessid,jdbcType=INTEGER},
+      </if>
+      <if test="categoryid != null">
+        #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="costprice != null">
+        #{costprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="onprice != null">
+        #{onprice,jdbcType=DECIMAL},
+      </if>
+      <if test="offprice != null">
+        #{offprice,jdbcType=DECIMAL},
+      </if>
+      <if test="cash != null">
+        #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="stand != null">
+        #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="store != null">
+        #{store,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="isapp != null">
+        #{isapp,jdbcType=TINYINT},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sales != null">
+        #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="moods != null">
+        #{moods,jdbcType=INTEGER},
+      </if>
+      <if test="businessgoodsauditid != null">
+        #{businessgoodsauditid,jdbcType=INTEGER},
+      </if>
+      <if test="statistics != null">
+        #{statistics,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="safeStore != null">
+        #{safeStore,jdbcType=INTEGER},
+      </if>
+      <if test="isAutoOrder != null">
+        #{isAutoOrder,jdbcType=BIT},
+      </if>
+      <if test="describes != null">
+        #{describes,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mysql.model.GoodsInfo">
+    update goods_info
+    <set>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsname != null">
+        goodsname = #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsnick != null">
+        goodsnick = #{goodsnick,jdbcType=VARCHAR},
+      </if>
+      <if test="platformgoodsid != null">
+        platformgoodsid = #{platformgoodsid,jdbcType=INTEGER},
+      </if>
+      <if test="businessid != null">
+        businessid = #{businessid,jdbcType=INTEGER},
+      </if>
+      <if test="categoryid != null">
+        categoryid = #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="costprice != null">
+        costprice = #{costprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="onprice != null">
+        onprice = #{onprice,jdbcType=DECIMAL},
+      </if>
+      <if test="offprice != null">
+        offprice = #{offprice,jdbcType=DECIMAL},
+      </if>
+      <if test="cash != null">
+        cash = #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="stand != null">
+        stand = #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="store != null">
+        store = #{store,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="isapp != null">
+        isapp = #{isapp,jdbcType=TINYINT},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sales != null">
+        sales = #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="moods != null">
+        moods = #{moods,jdbcType=INTEGER},
+      </if>
+      <if test="businessgoodsauditid != null">
+        businessgoodsauditid = #{businessgoodsauditid,jdbcType=INTEGER},
+      </if>
+      <if test="statistics != null">
+        statistics = #{statistics,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="safeStore != null">
+        safe_store = #{safeStore,jdbcType=INTEGER},
+      </if>
+      <if test="isAutoOrder != null">
+        is_auto_order = #{isAutoOrder,jdbcType=BIT},
+      </if>
+      <if test="describes != null">
+        describes = #{describes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.test.mysql.model.GoodsInfo">
+    update goods_info
+    set barcode = #{barcode,jdbcType=VARCHAR},
+      goodsname = #{goodsname,jdbcType=VARCHAR},
+      goodsnick = #{goodsnick,jdbcType=VARCHAR},
+      platformgoodsid = #{platformgoodsid,jdbcType=INTEGER},
+      businessid = #{businessid,jdbcType=INTEGER},
+      categoryid = #{categoryid,jdbcType=INTEGER},
+      costprice = #{costprice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      onprice = #{onprice,jdbcType=DECIMAL},
+      offprice = #{offprice,jdbcType=DECIMAL},
+      cash = #{cash,jdbcType=DECIMAL},
+      stand = #{stand,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      store = #{store,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      isapp = #{isapp,jdbcType=TINYINT},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      sales = #{sales,jdbcType=INTEGER},
+      moods = #{moods,jdbcType=INTEGER},
+      businessgoodsauditid = #{businessgoodsauditid,jdbcType=INTEGER},
+      statistics = #{statistics,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      safe_store = #{safeStore,jdbcType=INTEGER},
+      is_auto_order = #{isAutoOrder,jdbcType=BIT},
+      describes = #{describes,jdbcType=LONGVARCHAR}
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mysql.model.GoodsInfo">
+    update goods_info
+    set barcode = #{barcode,jdbcType=VARCHAR},
+      goodsname = #{goodsname,jdbcType=VARCHAR},
+      goodsnick = #{goodsnick,jdbcType=VARCHAR},
+      platformgoodsid = #{platformgoodsid,jdbcType=INTEGER},
+      businessid = #{businessid,jdbcType=INTEGER},
+      categoryid = #{categoryid,jdbcType=INTEGER},
+      costprice = #{costprice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      onprice = #{onprice,jdbcType=DECIMAL},
+      offprice = #{offprice,jdbcType=DECIMAL},
+      cash = #{cash,jdbcType=DECIMAL},
+      stand = #{stand,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      store = #{store,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      isapp = #{isapp,jdbcType=TINYINT},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      sales = #{sales,jdbcType=INTEGER},
+      moods = #{moods,jdbcType=INTEGER},
+      businessgoodsauditid = #{businessgoodsauditid,jdbcType=INTEGER},
+      statistics = #{statistics,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      safe_store = #{safeStore,jdbcType=INTEGER},
+      is_auto_order = #{isAutoOrder,jdbcType=BIT}
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.test.mysql.model.GoodsInfo">
+    <id column="goodsid" jdbcType="INTEGER" property="goodsid" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+    <result column="goodsname" jdbcType="VARCHAR" property="goodsname" />
+    <result column="goodsnick" jdbcType="VARCHAR" property="goodsnick" />
+    <result column="platformgoodsid" jdbcType="INTEGER" property="platformgoodsid" />
+    <result column="businessid" jdbcType="INTEGER" property="businessid" />
+    <result column="categoryid" jdbcType="INTEGER" property="categoryid" />
+    <result column="costprice" jdbcType="DECIMAL" property="costprice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="onprice" jdbcType="DECIMAL" property="onprice" />
+    <result column="offprice" jdbcType="DECIMAL" property="offprice" />
+    <result column="cash" jdbcType="DECIMAL" property="cash" />
+    <result column="stand" jdbcType="VARCHAR" property="stand" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="store" jdbcType="INTEGER" property="store" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="isapp" jdbcType="TINYINT" property="isapp" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="moods" jdbcType="INTEGER" property="moods" />
+    <result column="businessgoodsauditid" jdbcType="INTEGER" property="businessgoodsauditid" />
+    <result column="statistics" jdbcType="TINYINT" property="statistics" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="safe_store" jdbcType="INTEGER" property="safeStore" />
+    <result column="is_auto_order" jdbcType="TINYINT" property="isAutoOrder" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.test.mysql.model.GoodsInfo">
+    <result column="describes" jdbcType="LONGVARCHAR" property="describes" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    goodsid, barcode, goodsname, goodsnick, platformgoodsid, businessid, categoryid, 
+    costprice, price, onprice, offprice, cash, stand, unit, store, weight, isapp, imgurl, 
+    sales, moods, businessgoodsauditid, statistics, ctime, safe_store, is_auto_order
+  </sql>
+  <sql id="Blob_Column_List">
+    describes
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.test.mysql.model.GoodsInfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.test.mysql.model.GoodsInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from goods_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods_info
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goods_info
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.mysql.model.GoodsInfo">
+    insert into goods_info (goodsid, barcode, goodsname, 
+      goodsnick, platformgoodsid, businessid, 
+      categoryid, costprice, price, 
+      onprice, offprice, cash, 
+      stand, unit, store, 
+      weight, isapp, imgurl, 
+      sales, moods, businessgoodsauditid, 
+      statistics, ctime, safe_store, 
+      is_auto_order, describes)
+    values (#{goodsid,jdbcType=INTEGER}, #{barcode,jdbcType=VARCHAR}, #{goodsname,jdbcType=VARCHAR}, 
+      #{goodsnick,jdbcType=VARCHAR}, #{platformgoodsid,jdbcType=INTEGER}, #{businessid,jdbcType=INTEGER}, 
+      #{categoryid,jdbcType=INTEGER}, #{costprice,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, 
+      #{onprice,jdbcType=DECIMAL}, #{offprice,jdbcType=DECIMAL}, #{cash,jdbcType=DECIMAL}, 
+      #{stand,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{store,jdbcType=INTEGER}, 
+      #{weight,jdbcType=INTEGER}, #{isapp,jdbcType=TINYINT}, #{imgurl,jdbcType=VARCHAR}, 
+      #{sales,jdbcType=INTEGER}, #{moods,jdbcType=INTEGER}, #{businessgoodsauditid,jdbcType=INTEGER}, 
+      #{statistics,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{safeStore,jdbcType=INTEGER}, 
+      #{isAutoOrder,jdbcType=TINYINT}, #{describes,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mysql.model.GoodsInfo">
+    insert into goods_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        goodsid,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+      <if test="goodsname != null">
+        goodsname,
+      </if>
+      <if test="goodsnick != null">
+        goodsnick,
+      </if>
+      <if test="platformgoodsid != null">
+        platformgoodsid,
+      </if>
+      <if test="businessid != null">
+        businessid,
+      </if>
+      <if test="categoryid != null">
+        categoryid,
+      </if>
+      <if test="costprice != null">
+        costprice,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="onprice != null">
+        onprice,
+      </if>
+      <if test="offprice != null">
+        offprice,
+      </if>
+      <if test="cash != null">
+        cash,
+      </if>
+      <if test="stand != null">
+        stand,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="store != null">
+        store,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="isapp != null">
+        isapp,
+      </if>
+      <if test="imgurl != null">
+        imgurl,
+      </if>
+      <if test="sales != null">
+        sales,
+      </if>
+      <if test="moods != null">
+        moods,
+      </if>
+      <if test="businessgoodsauditid != null">
+        businessgoodsauditid,
+      </if>
+      <if test="statistics != null">
+        statistics,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+      <if test="safeStore != null">
+        safe_store,
+      </if>
+      <if test="isAutoOrder != null">
+        is_auto_order,
+      </if>
+      <if test="describes != null">
+        describes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsname != null">
+        #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsnick != null">
+        #{goodsnick,jdbcType=VARCHAR},
+      </if>
+      <if test="platformgoodsid != null">
+        #{platformgoodsid,jdbcType=INTEGER},
+      </if>
+      <if test="businessid != null">
+        #{businessid,jdbcType=INTEGER},
+      </if>
+      <if test="categoryid != null">
+        #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="costprice != null">
+        #{costprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="onprice != null">
+        #{onprice,jdbcType=DECIMAL},
+      </if>
+      <if test="offprice != null">
+        #{offprice,jdbcType=DECIMAL},
+      </if>
+      <if test="cash != null">
+        #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="stand != null">
+        #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="store != null">
+        #{store,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="isapp != null">
+        #{isapp,jdbcType=TINYINT},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sales != null">
+        #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="moods != null">
+        #{moods,jdbcType=INTEGER},
+      </if>
+      <if test="businessgoodsauditid != null">
+        #{businessgoodsauditid,jdbcType=INTEGER},
+      </if>
+      <if test="statistics != null">
+        #{statistics,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="safeStore != null">
+        #{safeStore,jdbcType=INTEGER},
+      </if>
+      <if test="isAutoOrder != null">
+        #{isAutoOrder,jdbcType=TINYINT},
+      </if>
+      <if test="describes != null">
+        #{describes,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mysql.model.GoodsInfo">
+    update goods_info
+    <set>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsname != null">
+        goodsname = #{goodsname,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsnick != null">
+        goodsnick = #{goodsnick,jdbcType=VARCHAR},
+      </if>
+      <if test="platformgoodsid != null">
+        platformgoodsid = #{platformgoodsid,jdbcType=INTEGER},
+      </if>
+      <if test="businessid != null">
+        businessid = #{businessid,jdbcType=INTEGER},
+      </if>
+      <if test="categoryid != null">
+        categoryid = #{categoryid,jdbcType=INTEGER},
+      </if>
+      <if test="costprice != null">
+        costprice = #{costprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="onprice != null">
+        onprice = #{onprice,jdbcType=DECIMAL},
+      </if>
+      <if test="offprice != null">
+        offprice = #{offprice,jdbcType=DECIMAL},
+      </if>
+      <if test="cash != null">
+        cash = #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="stand != null">
+        stand = #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="store != null">
+        store = #{store,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="isapp != null">
+        isapp = #{isapp,jdbcType=TINYINT},
+      </if>
+      <if test="imgurl != null">
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sales != null">
+        sales = #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="moods != null">
+        moods = #{moods,jdbcType=INTEGER},
+      </if>
+      <if test="businessgoodsauditid != null">
+        businessgoodsauditid = #{businessgoodsauditid,jdbcType=INTEGER},
+      </if>
+      <if test="statistics != null">
+        statistics = #{statistics,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="safeStore != null">
+        safe_store = #{safeStore,jdbcType=INTEGER},
+      </if>
+      <if test="isAutoOrder != null">
+        is_auto_order = #{isAutoOrder,jdbcType=TINYINT},
+      </if>
+      <if test="describes != null">
+        describes = #{describes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.test.mysql.model.GoodsInfo">
+    update goods_info
+    set barcode = #{barcode,jdbcType=VARCHAR},
+      goodsname = #{goodsname,jdbcType=VARCHAR},
+      goodsnick = #{goodsnick,jdbcType=VARCHAR},
+      platformgoodsid = #{platformgoodsid,jdbcType=INTEGER},
+      businessid = #{businessid,jdbcType=INTEGER},
+      categoryid = #{categoryid,jdbcType=INTEGER},
+      costprice = #{costprice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      onprice = #{onprice,jdbcType=DECIMAL},
+      offprice = #{offprice,jdbcType=DECIMAL},
+      cash = #{cash,jdbcType=DECIMAL},
+      stand = #{stand,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      store = #{store,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      isapp = #{isapp,jdbcType=TINYINT},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      sales = #{sales,jdbcType=INTEGER},
+      moods = #{moods,jdbcType=INTEGER},
+      businessgoodsauditid = #{businessgoodsauditid,jdbcType=INTEGER},
+      statistics = #{statistics,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      safe_store = #{safeStore,jdbcType=INTEGER},
+      is_auto_order = #{isAutoOrder,jdbcType=TINYINT},
+      describes = #{describes,jdbcType=LONGVARCHAR}
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mysql.model.GoodsInfo">
+    update goods_info
+    set barcode = #{barcode,jdbcType=VARCHAR},
+      goodsname = #{goodsname,jdbcType=VARCHAR},
+      goodsnick = #{goodsnick,jdbcType=VARCHAR},
+      platformgoodsid = #{platformgoodsid,jdbcType=INTEGER},
+      businessid = #{businessid,jdbcType=INTEGER},
+      categoryid = #{categoryid,jdbcType=INTEGER},
+      costprice = #{costprice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      onprice = #{onprice,jdbcType=DECIMAL},
+      offprice = #{offprice,jdbcType=DECIMAL},
+      cash = #{cash,jdbcType=DECIMAL},
+      stand = #{stand,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      store = #{store,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      isapp = #{isapp,jdbcType=TINYINT},
+      imgurl = #{imgurl,jdbcType=VARCHAR},
+      sales = #{sales,jdbcType=INTEGER},
+      moods = #{moods,jdbcType=INTEGER},
+      businessgoodsauditid = #{businessgoodsauditid,jdbcType=INTEGER},
+      statistics = #{statistics,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      safe_store = #{safeStore,jdbcType=INTEGER},
+      is_auto_order = #{isAutoOrder,jdbcType=TINYINT}
+    where goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+</mapper>

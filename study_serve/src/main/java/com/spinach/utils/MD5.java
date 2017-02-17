@@ -1,4 +1,4 @@
-package com.zhangwei.common;
+package com.spinach.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

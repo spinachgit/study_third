@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.mysql.dao.tttMapper" >
+  <resultMap id="BaseResultMap" type="com.test.mysql.model.ttt" >
+    <id column="message_merchant_info_id" property="messageMerchantInfoId" jdbcType="INTEGER" />
+    <result column="admin_user_id" property="adminUserId" jdbcType="INTEGER" />
+    <result column="admin_user_name" property="adminUserName" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="isauto" property="isauto" jdbcType="BIT" />
+    <result column="isauto" property="isauto" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    message_merchant_info_id, admin_user_id, admin_user_name, content, ctime, isauto
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.test.mysql.model.tttExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ttt
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ttt
+    where message_merchant_info_id = #{messageMerchantInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ttt
+    where message_merchant_info_id = #{messageMerchantInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.mysql.model.ttt" >
+    insert into ttt (message_merchant_info_id, admin_user_id, 
+      admin_user_name, content, ctime, 
+      isauto)
+    values (#{messageMerchantInfoId,jdbcType=INTEGER}, #{adminUserId,jdbcType=INTEGER}, 
+      #{adminUserName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{isauto,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.mysql.model.ttt" >
+    insert into ttt
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageMerchantInfoId != null" >
+        message_merchant_info_id,
+      </if>
+      <if test="adminUserId != null" >
+        admin_user_id,
+      </if>
+      <if test="adminUserName != null" >
+        admin_user_name,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="isauto != null" >
+        isauto,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageMerchantInfoId != null" >
+        #{messageMerchantInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="adminUserId != null" >
+        #{adminUserId,jdbcType=INTEGER},
+      </if>
+      <if test="adminUserName != null" >
+        #{adminUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isauto != null" >
+        #{isauto,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.mysql.model.ttt" >
+    update ttt
+    <set >
+      <if test="adminUserId != null" >
+        admin_user_id = #{adminUserId,jdbcType=INTEGER},
+      </if>
+      <if test="adminUserName != null" >
+        admin_user_name = #{adminUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isauto != null" >
+        isauto = #{isauto,jdbcType=BIT},
+      </if>
+    </set>
+    where message_merchant_info_id = #{messageMerchantInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.mysql.model.ttt" >
+    update ttt
+    set admin_user_id = #{adminUserId,jdbcType=INTEGER},
+      admin_user_name = #{adminUserName,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      isauto = #{isauto,jdbcType=BIT}
+    where message_merchant_info_id = #{messageMerchantInfoId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -43,7 +43,7 @@
     </javaClientGenerator>
   	
   	<!-- schema你的数据库，tableName表明，domainObjectName对应你的javabean类名  要生成的table，可以有多个table  -->
-    <table schema="fxg" tableName="business_bank" domainObjectName="BusinessBank" enableCountByExample="false" enableUpdateByExample="false"  
+    <table schema="fxg" tableName="ttt" domainObjectName="ttt" enableCountByExample="false" enableUpdateByExample="false"  
            enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"
            >  
     </table>  
