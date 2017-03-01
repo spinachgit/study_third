@@ -148,6 +148,7 @@ public class JobTaskService {
 		}
 	}
 
+	
 	@PostConstruct
 	public void init() throws Exception {
 
@@ -292,6 +293,27 @@ public class JobTaskService {
 	}
 
 	public static void main(String[] args) {
-		CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("xxxxx");
+		//CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("xxxxx");
+		JobTaskService job = new JobTaskService();
+		
+		ScheduleJob scheduleJob = new ScheduleJob();
+		scheduleJob.setJobId(10l);
+		scheduleJob.setBeanClass("com.snailxr.base.task.TaskTest");
+		scheduleJob.setCreateTime(new Date());
+		scheduleJob.setCronExpression("0/1 * * * * ?");
+		scheduleJob.setDescription("test");
+		scheduleJob.setIsConcurrent("1");
+		scheduleJob.setJobGroup("myGroup");
+		scheduleJob.setJobName("测试任务");
+		scheduleJob.setJobStatus("1");
+		scheduleJob.setMethodName("run");
+		scheduleJob.setSpringId("taskTest");
+		scheduleJob.setUpdateTime(new Date());
+		try {
+			job.runAJobNow(scheduleJob);
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
