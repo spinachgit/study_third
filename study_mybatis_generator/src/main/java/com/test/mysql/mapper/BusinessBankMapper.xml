@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bluemobi.dao.business.BusinessBankDao">
+	<resultMap id="entityResultMap"	type="com.bluemobi.po.business.BusinessBank">
+		<id column="business_bank_id" property="businessBankId" jdbcType="INTEGER" />
+		<result column="business_id" property="businessId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="bank_phone" property="bankPhone" jdbcType="VARCHAR" />
+		<result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="mapResultMap" type="java.util.HashMap" extends="entityResultMap"></resultMap>
+
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.bluemobi.po.business.BusinessBank"
+		useGeneratedKeys="true" keyProperty="businessBankId">
+		insert into
+		business_bank (
+		business_id,user_id,user_name,bank_account,bank_name,bank_phone,ctime
+		) values (
+		#{businessId},
+		#{userId},
+		#{userName},
+		#{bankAccount},
+		#{bankName},
+		#{bankPhone},
+		#{ctime}
+		)
+	</insert>
+
+	<!-- 删除消息 -->
+	<delete id="delete" parameterType="int">
+		delete from
+		business_bank
+		where
+		business_bank_id=#{businessBankId}
+	</delete>
+	<!-- 更新 -->
+	<update id="update" parameterType="com.bluemobi.po.business.BusinessBank">
+		update business_bank
+		<set>
+			<include refid="setCondition"></include>
+		</set>
+		where business_bank_id=#{businessBankId}
+	</update>
+	
+	<select id="selectObject" parameterType="map" resultMap="entityResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from business_bank where
+		business_bank_id=#{businessBankId}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="entityResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from business_bank
+		<include refid="whereCondition"></include>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from business_bank where
+		business_bank_id=#{businessBankId}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from business_bank
+		<include refid="whereCondition"></include>
+	</select>
+
+	<!-- 条件 -->
+	<sql id="entityColumn">
+		business_bank_id,business_id,user_id,user_name,bank_account,bank_name,ctime
+	</sql>
+	<sql id="setCondition">
+		<if test="businessBankId != null">
+			business_bank_id = #{businessBankId,jdbcType=INTEGER},
+		</if>
+		<if test="businessId != null">
+			business_id = #{businessId,jdbcType=INTEGER},
+		</if>
+		<if test="userId != null">
+			user_id = #{userId,jdbcType=INTEGER},
+		</if>
+		<if test="userName != null">
+			user_name = #{userName,jdbcType=VARCHAR},
+		</if>
+		<if test="bankAccount != null">
+			bank_account = #{bankAccount,jdbcType=VARCHAR},
+		</if>
+		<if test="bankName != null">
+			bank_name = #{bankName,jdbcType=VARCHAR},
+		</if>
+		<if test="bankPhone != null">
+			bank_phone = #{bankPhone,jdbcType=VARCHAR},
+		</if>
+		<if test="ctime != null">
+			ctime = #{ctime,jdbcType=VARCHAR},
+		</if>
+	</sql>
+	<sql id="whereCondition">
+		<where>
+			<trim suffixOverrides=",">
+			<if test="businessBankId != null">
+				and business_bank_id =	#{businessBankId,jdbcType=INTEGER},
+			</if>
+			<if test="businessId != null">
+				and business_id = #{businessId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				and user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				and user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+				and bank_account = #{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				and bank_name = #{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankPhone != null">
+				and bank_phone = #{bankPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="ctime != null">
+				and ctime = #{ctime,jdbcType=VARCHAR},
+			</if>
+			</trim>
+		</where>
+	</sql>
+</mapper> 
