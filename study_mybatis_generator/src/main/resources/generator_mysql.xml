@@ -35,7 +35,7 @@
   	<!-- mapper -->
     <sqlMapGenerator targetPackage="com.test22.mysql.mapper"  targetProject="src/main/java">  
       <property name="enableSubPackages" value="true" />
-     <!--  property name="methodNameCalculator" value="extended"  -->
+      <property name="methodNameCalculator" value="extended" /> 
     </sqlMapGenerator>  
 
 
@@ -46,9 +46,9 @@
   	
   	<!-- schema你的数据库，tableName表明，domainObjectName对应你的javabean类名  要生成的table，可以有多个table  -->
   	<!-- domainObjectName="TaskScheduleJob" -->
-    <table schema="fxg" tableName="activity_info" enableCountByExample="false"  enableUpdateByExample="false"  enableUpdateByPrimaryKey="false"
+    <table schema="fxg" tableName="%" enableCountByExample="false"  enableUpdateByExample="false"  enableUpdateByPrimaryKey="false"
            enableDeleteByExample="false" enableDeleteByPrimaryKey="false" enableSelectByPrimaryKey="false" enableSelectByExample="false" selectByExampleQueryId="false" 
-           
+           enableInsert="true" 
            >
           <property name="rootClass" value="com.spinach.utils.BaseEntity" />
     </table>  

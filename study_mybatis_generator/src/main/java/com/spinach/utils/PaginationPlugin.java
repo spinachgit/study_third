@@ -25,9 +25,8 @@ import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
  * @项目名称：project-common 
  * @类名称：PaginationPlugin 
  * @类描述：自定义代码生成器 
- * @创建人：YangChao 
+ * @创建人：wanghuihui 
  * @作者单位：北京宝库在线网络技术有限公司 
- * @联系方式：YangChao@baoku.com 
  * @创建时间：2016年9月5日 下午3:14:38 
  * @version 1.0.0 
  */  
@@ -83,24 +82,29 @@ public class PaginationPlugin extends PluginAdapter {
      */  
     @Override  
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {  
-        String tableName = introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime();// 数据库表名  
-        List<IntrospectedColumn> columns = introspectedTable.getAllColumns();  
+        //String tableName = introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime();// 数据库表名  
+        //List<IntrospectedColumn> columns = introspectedTable.getAllColumns();  
         XmlElement parentElement = document.getRootElement();
+        /*if(null != introspectedTable.getPrimaryKeyColumns()|| introspectedTable.getPrimaryKeyColumns().size()<=0){
+        	return super.sqlMapDocumentGenerated(document, introspectedTable);
+        }*/
         
         //生成EntityResultMap
         XmlElement resultMap = generatorEntityResultMap(introspectedTable);
         parentElement.addElement(resultMap);
+        
         //<resultMap id="mapResultMap" type="java.util.HashMap" extends="entityResultMap"></resultMap>
         XmlElement mapResultSql = new XmlElement("resultMap");  
         mapResultSql.addAttribute(new Attribute("id", mapResultMap));
         mapResultSql.addAttribute(new Attribute("type","java.util.HashMap"));
         mapResultSql.addAttribute(new Attribute("extends",entityResultMap));
+        parentElement.addElement(mapResultSql);
         
-        
-        //生成selectObject
+        //生成delete
         XmlElement delete = generatorDelete(introspectedTable,"delete");
         parentElement.addElement(delete);
-        //生成selectObject
+        
+        //生成update
         XmlElement update = generatorUpdate(introspectedTable,"update");
         parentElement.addElement(update);
         
@@ -121,14 +125,18 @@ public class PaginationPlugin extends PluginAdapter {
         XmlElement selectMapList = generatorSelectMapList(introspectedTable,"selectMapList");
         parentElement.addElement(selectMapList);
         
-        //生成whereCondition
-        XmlElement sql = generatorWhereSql(introspectedTable);
-        parentElement.addElement(sql);
+        //生成 entityColumn setCondition whereCondition 
+        XmlElement columnSql = generatorColumnSql(introspectedTable);
+        parentElement.addElement(columnSql);
+        XmlElement setSql = generatorSetSql(introspectedTable);
+        parentElement.addElement(setSql);
+        XmlElement whereSql = generatorWhereSql(introspectedTable);
+        parentElement.addElement(whereSql);
         
         return super.sqlMapDocumentGenerated(document, introspectedTable);  
     }  
     
-    /**
+	/**
      * <!-- 删除消息 -->
 	<delete id="delete" parameterType="int">
 		delete from
@@ -143,14 +151,18 @@ public class PaginationPlugin extends PluginAdapter {
      * @return
      */
     private XmlElement generatorDelete(IntrospectedTable introspectedTable, String id) {
-    	IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
+    	List<IntrospectedColumn> list = introspectedTable.getPrimaryKeyColumns();
+    	if(null== list || list.size()==0){
+    		return null;
+    	}
+    	IntrospectedColumn primaryKeys = list.get(0);
         XmlElement delete = new XmlElement("delete");  
         delete.addAttribute(new Attribute("id", id));  
         delete.addAttribute(new Attribute("parameterType", "int"));  
         
-        String temp = "delete from "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()+"\n where "
-        		+primaryKeys.getActualColumnName()+" = #{"+getColumn(primaryKeys.getActualColumnName())+",jdbcType="+primaryKeys.getJdbcType()+"}";
-        delete.addElement(new TextElement(temp)); 
+        String temp = "delete from "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime();
+        delete.addElement(new TextElement(temp));
+        delete.addElement(new TextElement("where "+primaryKeys.getActualColumnName()+" = #{"+primaryKeys.getJavaProperty()+",jdbcType="+primaryKeys.getJdbcTypeName()+"}"));
         return delete;
 	}
     
@@ -171,7 +183,11 @@ public class PaginationPlugin extends PluginAdapter {
      * @return
      */
 	private XmlElement generatorUpdate(IntrospectedTable introspectedTable, String id) {
-		IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
+		List<IntrospectedColumn> list = introspectedTable.getPrimaryKeyColumns();
+    	if(null== list || list.size()==0){
+    		return null;
+    	}
+    	IntrospectedColumn primaryKeys = list.get(0);
         XmlElement delete = new XmlElement("update");  
         delete.addAttribute(new Attribute("id", id));  
         delete.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));  
@@ -183,7 +199,7 @@ public class PaginationPlugin extends PluginAdapter {
         set.addElement(include);
         delete.addElement(set);
         
-        String temp = "where "+primaryKeys.getActualColumnName()+" = #{"+getColumn(primaryKeys.getActualColumnName())+",jdbcType="+primaryKeys.getJdbcType()+"}";
+        String temp = "where "+primaryKeys.getActualColumnName()+" = #{"+primaryKeys.getJavaProperty()+",jdbcType="+primaryKeys.getJdbcTypeName()+"}";
         delete.addElement(new TextElement(temp)); 
         return delete;
 	}
@@ -202,7 +218,11 @@ public class PaginationPlugin extends PluginAdapter {
      * @return
      */
     private XmlElement generatorSelectObject(IntrospectedTable introspectedTable,String id) {
-    	IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
+    	List<IntrospectedColumn> list = introspectedTable.getPrimaryKeyColumns();
+    	if(null== list || list.size()==0){
+    		return null;
+    	}
+    	IntrospectedColumn primaryKeys = list.get(0);
     	//添加getList  
         XmlElement select = new XmlElement("select");  
         select.addAttribute(new Attribute("id", id));  
@@ -214,7 +234,7 @@ public class PaginationPlugin extends PluginAdapter {
         include.addAttribute(new Attribute("refid", entityColumn));  
         select.addElement(include);
         String temp = "from "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()+" where "
-        		+primaryKeys.getActualColumnName()+" = #{"+getColumn(primaryKeys.getActualColumnName())+",jdbcType="+primaryKeys.getJdbcType()+"}";
+        		+primaryKeys.getActualColumnName()+" = #{"+primaryKeys.getJavaProperty()+",jdbcType="+primaryKeys.getJdbcTypeName()+"}";
         select.addElement(new TextElement(temp)); 
         return select;
 	}
@@ -234,7 +254,6 @@ public class PaginationPlugin extends PluginAdapter {
      * @return
      */
 	private XmlElement generatorSelectObjectList(IntrospectedTable introspectedTable, String id) {
-		IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
     	//添加getList  
         XmlElement select = new XmlElement("select");  
         select.addAttribute(new Attribute("id", id));  
@@ -269,7 +288,11 @@ public class PaginationPlugin extends PluginAdapter {
 	 * @return
 	 */
 	private XmlElement generatorSelectMap(IntrospectedTable introspectedTable, String id) {
-		IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
+		List<IntrospectedColumn> list = introspectedTable.getPrimaryKeyColumns();
+    	if(null== list || list.size()==0){
+    		return null;
+    	}
+    	IntrospectedColumn primaryKeys = list.get(0);
     	//添加getList  
         XmlElement select = new XmlElement("select");  
         select.addAttribute(new Attribute("id", id));  
@@ -281,9 +304,9 @@ public class PaginationPlugin extends PluginAdapter {
         include.addAttribute(new Attribute("refid", entityColumn));  
         select.addElement(include);
         
-        String temp = "from "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()
-        		+"\n where "+primaryKeys.getActualColumnName()+" = #{"+getColumn(primaryKeys.getActualColumnName())+",jdbcType="+primaryKeys.getJdbcType()+"}";
+        String temp = "from "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime();
         select.addElement(new TextElement(temp)); 
+        select.addElement(new TextElement("where "+primaryKeys.getActualColumnName()+" = #{"+primaryKeys.getJavaProperty()+",jdbcType="+primaryKeys.getJdbcTypeName()+"}")); 
         return select;
 	}
 	
@@ -301,7 +324,6 @@ public class PaginationPlugin extends PluginAdapter {
 	 * @return
 	 */
 	private XmlElement generatorSelectMapList(IntrospectedTable introspectedTable, String id) {
-		IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
     	//添加getList  
         XmlElement select = new XmlElement("select");  
         select.addAttribute(new Attribute("id", id));  
@@ -322,26 +344,13 @@ public class PaginationPlugin extends PluginAdapter {
         return select;
 	}
 
-	/*********************************** **************************************/
     /**
      * 
-    	<select id="getList" parameterType="com.test22.mysql.model.ActivityInfo" resultMap="BaseResultMap">
-	     select * from activity_info
-	    <include refid="sql_where" />
-	  </select>
-	
-     * 
      * 生成结果集
-    <resultMap id="entityResultMap"	type="com.bluemobi.po.business.BusinessBank">
-	<id column="business_bank_id" property="businessBankId" jdbcType="INTEGER" />
-	<result column="business_id" property="businessId" jdbcType="INTEGER" />
-	<result column="user_id" property="userId" jdbcType="INTEGER" />
-	<result column="user_name" property="userName" jdbcType="VARCHAR" />
-	<result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
-	<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
-	<result column="bank_phone" property="bankPhone" jdbcType="VARCHAR" />
-	<result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
-	</resultMap>
+	    <resultMap id="entityResultMap"	type="com.bluemobi.po.business.BusinessBank">
+		<id column="business_bank_id" property="businessBankId" jdbcType="INTEGER" />
+		<result column="business_id" property="businessId" jdbcType="INTEGER" />
+		</resultMap>
 	**/
 	private XmlElement generatorEntityResultMap(IntrospectedTable introspectedTable) {
         XmlElement sql = new XmlElement("resultMap");  
@@ -360,48 +369,79 @@ public class PaginationPlugin extends PluginAdapter {
         		element = new XmlElement("result");
         	}
         	element.addAttribute(new Attribute("column",columnOri.getActualColumnName()));
-        	element.addAttribute(new Attribute("property",getColumn(columnOri.getActualColumnName())));
+        	element.addAttribute(new Attribute("property",columnOri.getJavaProperty()));
         	element.addAttribute(new Attribute("jdbcType",columnOri.getJdbcTypeName()));
         	sql.addElement(element);  
         }  
         return sql;
 	}
 	
-	/**
-	<resultMap id="mapResultMap" type="java.util.HashMap" extends="entityResultMap"></resultMap>
-	/**
-         	getAliasedFullyQualifiedTableNameAtRuntime:activity_info
-			getBaseColumnListId:Base_Column_List
-			getBaseRecordType:com.test22.mysql.model.ActivityInfo
-			getBaseResultMapId:BaseResultMap
-			getBlobColumnListId:Blob_Column_List
-			getCountByExampleStatementId:countByExample
-			getDAOImplementationType:com.test22.mysql.dao.ActivityInfoDAOImpl
-			getDAOInterfaceType:com.test22.mysql.dao.ActivityInfoDAO
-			getDeleteByExampleStatementId:deleteByExample
-			getDeleteByPrimaryKeyStatementId:deleteByPrimaryKey
-			getExampleType:com.test22.mysql.model.ActivityInfoExample
-			getExampleWhereClauseId:Example_Where_Clause
-			getFullyQualifiedTableNameAtRuntime:activity_info
-        System.out.println("getAliasedFullyQualifiedTableNameAtRuntime:"+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime());
-        System.out.println("getBaseColumnListId:"+introspectedTable.getBaseColumnListId());
-        System.out.println("getBaseRecordType:"+introspectedTable.getBaseRecordType());
-        System.out.println("getBaseResultMapId:"+introspectedTable.getBaseResultMapId());
-        System.out.println("getBlobColumnListId:"+introspectedTable.getBlobColumnListId());
-        System.out.println("getCountByExampleStatementId:"+introspectedTable.getCountByExampleStatementId());
-        System.out.println("getDAOImplementationType:"+introspectedTable.getDAOImplementationType());
-        System.out.println("getDAOInterfaceType:"+introspectedTable.getDAOInterfaceType());
-        System.out.println("getDeleteByExampleStatementId:"+introspectedTable.getDeleteByExampleStatementId());
-        System.out.println("getDeleteByPrimaryKeyStatementId:"+introspectedTable.getDeleteByPrimaryKeyStatementId());
-        System.out.println("getExampleType:"+introspectedTable.getExampleType());
-        System.out.println("getExampleWhereClauseId:"+introspectedTable.getExampleWhereClauseId());
-        System.out.println("getFullyQualifiedTableNameAtRuntime:"+introspectedTable.getFullyQualifiedTableNameAtRuntime());
-	*/
+    /**
+     * <sql id="entityColumn">
+		business_bank_id,business_id,user_id,user_name,bank_account,bank_name,ctime
+	   </sql>
+     * @author wanghuihui
+     * @time: 2017年3月3日下午1:21:51
+     * @param introspectedTable
+     * @return
+     */
+	private XmlElement generatorColumnSql(IntrospectedTable introspectedTable) {
+		XmlElement sql = new XmlElement("sql");  
+        sql.addAttribute(new Attribute("id", entityColumn));
+        
+        StringBuilder sb = new StringBuilder();
+        List<IntrospectedColumn> columnList = introspectedTable.getAllColumns();
+        for (int i=0;i<columnList.size();i++) {
+        	IntrospectedColumn columnOri = columnList.get(i);
+        	XmlElement element ;
+        	if(i==0){
+        		sb.append(columnOri.getActualColumnName());
+        	}else{
+        		sb.append(","+columnOri.getActualColumnName());
+        	}
+        }
+        sql.addElement(new TextElement(sb.toString()));;
+        return sql;
+	}
 	
-    /*********************************** **************************************/
-    
-    
-    
+	/**
+	 * 生成 setCondition
+	 * <sql id="setCondition">
+		<if test="businessBankId != null">
+			business_bank_id = #{businessBankId,jdbcType=INTEGER},
+		</if>
+		</sql>
+	 * @author wanghuihui
+	 * @time: 2017年3月3日下午1:22:19
+	 * @param introspectedTable
+	 * @return
+	 */
+	private XmlElement generatorSetSql(IntrospectedTable introspectedTable) {
+		XmlElement sql = new XmlElement("sql");  
+        sql.addAttribute(new Attribute("id", setCondition));
+        
+        StringBuilder sb = new StringBuilder();
+        List<IntrospectedColumn> columnList = introspectedTable.getAllColumns();
+        for (int i=0;i<columnList.size();i++) {
+        	IntrospectedColumn columnOri = columnList.get(i);
+        	XmlElement isNotNullElement = new XmlElement("if");
+            sb.setLength(0);  
+            sb.append(columnOri.getJavaProperty());  
+            sb.append(" != null and "); //$NON-NLS-1$  
+            sb.append(columnOri.getJavaProperty());  
+            sb.append(" != '' "); //$NON-NLS-1$  
+            isNotNullElement.addAttribute(new Attribute("test", sb.toString()));
+            sql.addElement(isNotNullElement);  
+  
+            sb.setLength(0);  
+            sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(columnOri));  
+            sb.append(" = "); //$NON-NLS-1$  
+            sb.append(MyBatis3FormattingUtilities.getParameterClause(columnOri));  
+            isNotNullElement.addElement(new TextElement(sb.toString()+",")); 
+        }
+        sql.addElement(new TextElement(sb.toString()));
+        return sql;
+	}
     
     /**
      * 生成结果预览：
@@ -471,41 +511,6 @@ public class PaginationPlugin extends PluginAdapter {
         return super.sqlMapSelectByExampleWithoutBLOBsElementGenerated(element, introspectedTable);  
     }  
   
-    /** 
-     * mapping中添加方法 
-     */  
-    // @Override  
-    public boolean sqlMapDocumentGenerated2(Document document, IntrospectedTable introspectedTable) {  
-        String tableName = introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime();// 数据库表名  
-        List<IntrospectedColumn> columns = introspectedTable.getAllColumns();  
-        // 添加sql  
-        XmlElement sql = new XmlElement("select");  
-  
-        XmlElement parentElement = document.getRootElement();  
-        XmlElement deleteLogicByIdsElement = new XmlElement("update");  
-        deleteLogicByIdsElement.addAttribute(new Attribute("id", "deleteLogicByIds"));  
-        deleteLogicByIdsElement  
-                .addElement(new TextElement(  
-                        "update "  
-                                + tableName  
-                                + " set deleteFlag = #{deleteFlag,jdbcType=INTEGER} where id in "  
-                                + " <foreach item=\"item\" index=\"index\" collection=\"ids\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach> "));  
-  
-        parentElement.addElement(deleteLogicByIdsElement);  
-        XmlElement queryPage = new XmlElement("select");  
-        queryPage.addAttribute(new Attribute("id", "queryPage"));  
-        queryPage.addAttribute(new Attribute("resultMap", "BaseResultMap"));  
-        queryPage.addElement(new TextElement("select "));  
-  
-        XmlElement include = new XmlElement("include");  
-        include.addAttribute(new Attribute("refid", "Base_Column_List"));  
-  
-        queryPage.addElement(include);  
-        queryPage.addElement(new TextElement(" from " + tableName + " ${sql}"));  
-        parentElement.addElement(queryPage);  
-        return super.sqlMapDocumentGenerated(document, introspectedTable);  
-    }  
-  
     private void addSerialVersionUID(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {  
         CommentGenerator commentGenerator = context.getCommentGenerator();  
         Field field = new Field();  
@@ -561,17 +566,6 @@ public class PaginationPlugin extends PluginAdapter {
         commentGenerator.addGeneralMethodComment(method, introspectedTable);  
         topLevelClass.addMethod(method);  
     }  
-    /**
-     * 驼峰标示
-     * @author wanghuihui
-     * @time: 2017年3月3日上午10:53:55
-     * @param actualColumnName
-     * @return
-     */
-    private String getColumn(String actualColumnName) {
-		// TODO Auto-generated method stub
-		return actualColumnName;
-	}
 
     public boolean validate(List<String> arg0) {  
         return true;  
