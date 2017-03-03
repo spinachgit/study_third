@@ -36,6 +36,7 @@ public class PaginationPlugin extends PluginAdapter {
 	private static final String entityColumn = "entityColumn";
 	private static final String whereCondition = "whereCondition";
 	private static final String mapResultMap = "mapResultMap";
+	private static final String setCondition = "setCondition";
     /**
      *  生成dao 
      */
@@ -97,6 +98,13 @@ public class PaginationPlugin extends PluginAdapter {
         
         
         //生成selectObject
+        XmlElement delete = generatorDelete(introspectedTable,"delete");
+        parentElement.addElement(delete);
+        //生成selectObject
+        XmlElement update = generatorUpdate(introspectedTable,"update");
+        parentElement.addElement(update);
+        
+        //生成selectObject
         XmlElement selectObject = generatorSelectObject(introspectedTable,"selectObject");
         parentElement.addElement(selectObject);
         
@@ -121,6 +129,66 @@ public class PaginationPlugin extends PluginAdapter {
     }  
     
     /**
+     * <!-- 删除消息 -->
+	<delete id="delete" parameterType="int">
+		delete from
+		business_bank
+		where
+		business_bank_id=#{businessBankId}
+	</delete>
+     * @author wanghuihui
+     * @time: 2017年3月3日下午12:59:28
+     * @param introspectedTable
+     * @param id
+     * @return
+     */
+    private XmlElement generatorDelete(IntrospectedTable introspectedTable, String id) {
+    	IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
+        XmlElement delete = new XmlElement("delete");  
+        delete.addAttribute(new Attribute("id", id));  
+        delete.addAttribute(new Attribute("parameterType", "int"));  
+        
+        String temp = "delete from "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()+"\n where "
+        		+primaryKeys.getActualColumnName()+" = #{"+getColumn(primaryKeys.getActualColumnName())+",jdbcType="+primaryKeys.getJdbcType()+"}";
+        delete.addElement(new TextElement(temp)); 
+        return delete;
+	}
+    
+    /**
+     * 
+	<!-- 更新 -->
+	<update id="update" parameterType="com.bluemobi.po.business.BusinessBank">
+		update business_bank
+		<set>
+			<include refid="setCondition"></include>
+		</set>
+		where business_bank_id=#{businessBankId}
+	</update>
+     * @author wanghuihui
+     * @time: 2017年3月3日下午12:59:09
+     * @param introspectedTable
+     * @param string
+     * @return
+     */
+	private XmlElement generatorUpdate(IntrospectedTable introspectedTable, String id) {
+		IntrospectedColumn primaryKeys = introspectedTable.getPrimaryKeyColumns().get(0);
+        XmlElement delete = new XmlElement("update");  
+        delete.addAttribute(new Attribute("id", id));  
+        delete.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));  
+        delete.addElement(new TextElement("update "+introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
+        
+        XmlElement set = new XmlElement("set");
+        XmlElement include = new XmlElement("include");
+        include.addAttribute(new Attribute("refid", setCondition));
+        set.addElement(include);
+        delete.addElement(set);
+        
+        String temp = "where "+primaryKeys.getActualColumnName()+" = #{"+getColumn(primaryKeys.getActualColumnName())+",jdbcType="+primaryKeys.getJdbcType()+"}";
+        delete.addElement(new TextElement(temp)); 
+        return delete;
+	}
+
+	/**
      * <select id="selectObject" parameterType="map" resultMap="entityResultMap">
 		select
 		<include refid="entityColumn"></include>
