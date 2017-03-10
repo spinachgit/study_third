@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!-- 在项目中会自动找到 -->
+	<!-- <classPathEntry location="D:\develop\repository\ojdbc\ojdbc\6\ojdbc-6.jar" /> -->
+	<context id="context1">
+		<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@10.12.2.129:1521:ORCL" userId="lvmama_lvf"
+			password="lvmama_lvf" />
+		
+		<!-- model -->
+		<javaModelGenerator targetPackage="com.test.oracle.model" targetProject="src/main/java" />
+		<!-- mapper -->
+		<sqlMapGenerator targetPackage="com.test.oracle.mapper" targetProject="src/main/java" />
+		<!-- dao -->
+		<javaClientGenerator targetPackage="com.test.oracle.dao" targetProject="src/main/java" type="XMLMAPPER" />
+		
+		<!--  schema="lvmamadb" 网络上说：schema是数据名，加了反而不能生成。 -->
+		<table tableName="T_FMAD_AIRPLANE"
+			domainObjectName="Computer" enableInsert="true"
+			enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"
+			enableDeleteByPrimaryKey="true" enableSelectByExample="false"
+			enableDeleteByExample="false" enableCountByExample="false"
+			enableUpdateByExample="false">
+		</table>
+	</context>
+</generatorConfiguration>  

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bluemobi.dao.business.TaskScheduleJobDao">
+	<resultMap id="entityResultMap" type="com.bluemobi.po.business.TaskScheduleJob">
+		<id column="job_id" property="jobId" jdbcType="BIGINT" />
+		<result column="job_name" property="jobName" jdbcType="VARCHAR" />
+		<result column="job_group" property="jobGroup" jdbcType="VARCHAR" />
+		<result column="job_status" property="jobStatus" jdbcType="VARCHAR" />
+		<result column="cron_expression" property="cronExpression" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="bean_class" property="beanClass" jdbcType="VARCHAR" />
+		<result column="is_concurrent" property="isConcurrent" jdbcType="VARCHAR" />
+		<result column="spring_id" property="springId" jdbcType="VARCHAR" />
+		<result column="method_name" property="methodName" jdbcType="VARCHAR" />
+		<result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="mapResultMap" type="java.util.HashMap" extends="entityResultMap"></resultMap>
+
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.bluemobi.po.business.TaskScheduleJob" useGeneratedKeys="true" keyProperty="jobId">
+		insert into
+		task_schedule_job (
+		job_name,job_group,job_status,cron_expression,description,bean_class,is_concurrent,spring_id,method_name,ctime
+		) values (
+		#{jobName,jdbcType=VARCHAR},
+		#{jobGroup,jdbcType=VARCHAR},
+		#{jobStatus,jdbcType=VARCHAR},
+		#{cronExpression,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{beanClass,jdbcType=VARCHAR},
+		#{isConcurrent,jdbcType=VARCHAR},
+		#{springId,jdbcType=VARCHAR},
+		#{methodName,jdbcType=VARCHAR}
+		#{ctime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<!-- 删除消息 -->
+	<delete id="delete" parameterType="int">
+		delete from
+		task_schedule_job
+		where
+		job_id=#{jobId}
+	</delete>
+	<!-- 更新 -->
+	<update id="update" parameterType="com.bluemobi.po.business.TaskScheduleJob">
+		update task_schedule_job
+		<set>
+			<include refid="setCondition"></include>
+		</set>
+		where job_id=#{jobId}
+	</update>
+	<select id="selectObject" parameterType="map" resultMap="entityResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from task_schedule_job where
+		job_id=#{jobId}
+	</select>
+
+	<select id="selectObjectList" parameterType="map" resultMap="entityResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from task_schedule_job
+		<include refid="whereCondition"></include>
+	</select>
+
+	<select id="selectMap" parameterType="map" resultMap="mapResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from task_schedule_job where
+		job_id=#{jobId}
+	</select>
+
+	<select id="selectMapList" parameterType="map" resultMap="mapResultMap">
+		select
+		<include refid="entityColumn"></include>
+		from task_schedule_job
+		<include refid="whereCondition"></include>
+	</select>
+
+	<!-- 条件 -->
+	<sql id="entityColumn">
+		job_id,job_name,job_group,job_status,cron_expression,description,bean_class,is_concurrent,spring_id,method_name,ctime
+	</sql>
+	<sql id="setCondition">
+		<if test="jobName != null">
+			job_name = #{jobName,jdbcType=VARCHAR},
+		</if>
+		<if test="jobGroup != null">
+			job_group = #{jobGroup,jdbcType=VARCHAR},
+		</if>
+		<if test="jobStatus != null">
+			job_status = #{jobStatus,jdbcType=VARCHAR},
+		</if>
+		<if test="cronExpression != null">
+			cron_expression = #{cronExpression,jdbcType=VARCHAR},
+		</if>
+		<if test="description != null">
+			description = #{description,jdbcType=VARCHAR},
+		</if>
+		<if test="beanClass != null">
+			bean_class = #{beanClass,jdbcType=VARCHAR},
+		</if>
+		<if test="isConcurrent != null">
+			is_concurrent = #{isConcurrent,jdbcType=VARCHAR},
+		</if>
+		<if test="springId != null">
+			spring_id = #{springId,jdbcType=VARCHAR},
+		</if>
+		<if test="methodName != null">
+			method_name = #{methodName,jdbcType=VARCHAR},
+		</if>
+		<if test="ctime != null">
+			ctime = #{ctime,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	<sql id="whereCondition">
+		<where>
+			<trim suffixOverrides=",">
+				<if test="jobId != null">
+					job_id = #{jobId,jdbcType=INTEGER}
+				</if>
+				<if test="jobName != null">
+					and job_name = #{jobName,jdbcType=VARCHAR}
+				</if>
+				<if test="jobGroup != null">
+					and job_group = #{jobGroup,jdbcType=VARCHAR}
+				</if>
+				<if test="jobStatus != null">
+					and job_status = #{jobStatus,jdbcType=VARCHAR}
+				</if>
+				<if test="cronExpression != null">
+					and cron_expression = #{cronExpression,jdbcType=VARCHAR}
+				</if>
+				<if test="description != null">
+					and description = #{description,jdbcType=VARCHAR}
+				</if>
+				<if test="beanClass != null">
+					and bean_class = #{beanClass,jdbcType=VARCHAR}
+				</if>
+				<if test="isConcurrent != null">
+					and is_concurrent = #{isConcurrent,jdbcType=VARCHAR}
+				</if>
+				<if test="springId != null">
+					and spring_id = #{springId,jdbcType=VARCHAR}
+				</if>
+				<if test="methodName != null">
+					and method_name = #{methodName,jdbcType=VARCHAR}
+				</if>
+				<if test="ctime != null">
+					and ctime = #{ctime,jdbcType=VARCHAR}
+				</if>
+			</trim>
+		</where>
+	</sql>
+</mapper> 
