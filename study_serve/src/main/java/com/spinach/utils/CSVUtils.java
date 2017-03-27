@@ -1,4 +1,4 @@
-package com.spinach.utils;
+package com.bluemobi.util.csv;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
