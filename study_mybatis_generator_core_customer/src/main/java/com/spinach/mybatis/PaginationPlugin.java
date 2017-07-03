@@ -22,6 +22,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 import com.spinach.mybatis.generator.GeneratorXML;
+import com.spinach.utils.PropertyUtils;
 
 /**
  * 自定义代码生成器 
@@ -35,8 +36,8 @@ public class PaginationPlugin extends PluginAdapter {
      */
     @Override  
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {  
-        FullyQualifiedJavaType extend = new FullyQualifiedJavaType("MybatisBaseDao<" + introspectedTable.getBaseRecordType()  + ">");  
-        FullyQualifiedJavaType imp = new FullyQualifiedJavaType(Constants.IMPORT_PATH);  
+        FullyQualifiedJavaType extend = new FullyQualifiedJavaType("MyBatisBaseDao<" + introspectedTable.getBaseRecordType()  + ">");  
+        FullyQualifiedJavaType imp = new FullyQualifiedJavaType(PropertyUtils.daoInterface);  
         interfaze.addSuperInterface(extend);// 添加 extends MybatisBaseDao<User>  
         interfaze.addImportedType(imp);// 添加import com.spinach.utils;  
         interfaze.getMethods().clear();

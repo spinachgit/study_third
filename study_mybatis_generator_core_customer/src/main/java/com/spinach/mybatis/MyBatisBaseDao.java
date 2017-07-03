@@ -3,7 +3,7 @@ package com.spinach.mybatis;
 import java.util.List;
 import java.util.Map;
 
-public interface MybatisBaseDao<T> {
+public interface MyBatisBaseDao<T> {
 
 	public abstract <P> int insert(P paramP);
 

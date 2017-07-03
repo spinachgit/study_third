@@ -1,7 +1,8 @@
 package com.tag.base.model;
 
-import com.tag.framework.model.AbstractObject;
 import java.util.Date;
+
+import com.spinach.mybatis.AbstractObject;
 
 public class SystemJpushConfig extends AbstractObject {
     /**
